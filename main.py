@@ -7,13 +7,13 @@ from dotenv import load_dotenv
 
 
 
-def shorten_link(api_url, token, link):
+def shorten_link(api_url, token, link_to_shorten):
     headers = {
         'Authorization': f'Bearer {token}'
     }
 
     data = {
-        'long_url': link
+        'long_url': link_to_shorten
     }
 
     url = api_url.format('shorten')
@@ -48,8 +48,8 @@ def is_bitlink(api_url, token, link):
         'Authorization': f'Bearer {token}'
     }
 
-    query_url = api_url.format(f'bitlinks/{summary_link}')
-    response = requests.get(query_url, headers=headers)
+    url = api_url.format(f'bitlinks/{summary_link}')
+    response = requests.get(url, headers=headers)
     return response.ok
 
 
