@@ -5,10 +5,9 @@ import requests
 from dotenv import load_dotenv
 
 
-API_URL_TEMPLATE = 'https://api-ssl.bitly.com/v4/{}'
 
 
-def shorten_link(token, link):
+def shorten_link(api_url, token, link):
     headers = {
         'Authorization': f'Bearer {token}'
     }
@@ -17,7 +16,7 @@ def shorten_link(token, link):
         'long_url': link
     }
 
-    url = API_URL_TEMPLATE.format('shorten')
+    url = api_url.format('shorten')
 
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
@@ -25,7 +24,7 @@ def shorten_link(token, link):
     return bitlink
 
 
-def count_clicks(token, link):
+def count_clicks(api_url, token, link):
     headers = {
         'Authorization': f'Bearer {token}'
     }
@@ -33,8 +32,7 @@ def count_clicks(token, link):
     parsed = urlparse(link)
     summary_link = parsed.netloc + parsed.path
 
-    # https://api-ssl.bitly.com/v4/bitlinks/{bitlink}/clicks/summary
-    url = API_URL_TEMPLATE.format(f'bitlinks/{summary_link}/clicks/summary')
+    url = api_url.format(f'bitlinks/{summary_link}/clicks/summary')
 
     response = requests.get(url, headers=headers)
     response.raise_for_status()
@@ -42,7 +40,7 @@ def count_clicks(token, link):
     return clicks_count
 
 
-def is_bitlink(token, link):
+def is_bitlink(api_url, token, link):
     parsed = urlparse(link)
     summary_link = parsed.netloc + parsed.path
 
@@ -50,20 +48,20 @@ def is_bitlink(token, link):
         'Authorization': f'Bearer {token}'
     }
 
-    # https://api-ssl.bitly.com/v4/bitlinks/{bitlink}
-    query_url = API_URL_TEMPLATE.format(f'bitlinks/{summary_link}')
+    query_url = api_url.format(f'bitlinks/{summary_link}')
     response = requests.get(query_url, headers=headers)
     return response.ok
 
 
 def main():
     load_dotenv()
+    api_url_template = 'https://api-ssl.bitly.com/v4/{}'
     token = os.environ['BITLY_DVMN_TOKEN']
     user_link = input('Введите ссылку для подсчёта кликов или укорачивания: ')
-    if is_bitlink(token, user_link):
+    if is_bitlink(api_url_template, token, user_link):
         print('Ссылка', user_link, 'определена как битлинк')
         try:
-            clicks_count = count_clicks(token, user_link)
+            clicks_count = count_clicks(api_url_template, token, user_link)
         except requests.exceptions.HTTPError:
             print('Произошла ошибка. Проверьте верность введёных данных')
             sys.exit(1)
@@ -71,7 +69,7 @@ def main():
     else:
         print('Ссылка', user_link, 'определена как обычная')
         try:
-            bitlink = shorten_link(token, user_link)
+            bitlink = shorten_link(api_url_template, token, user_link)
         except requests.exceptions.HTTPError:
             print('Произошла ошибка. Проверьте верность введёных данных')
             sys.exit(1)
