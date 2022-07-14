@@ -1,8 +1,9 @@
 import os
-import sys
-from urllib.parse import urlparse
 import requests
+import sys
+
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
 
 
