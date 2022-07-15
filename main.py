@@ -29,7 +29,7 @@ def count_clicks(api_url, token, link):
     }
 
     parsed = urlparse(link)
-    summary_link = parsed.netloc + parsed.path
+    summary_link = f'{parsed.netloc}{parsed.path}'
 
     url = api_url.format(f'bitlinks/{summary_link}/clicks/summary')
 
@@ -41,7 +41,7 @@ def count_clicks(api_url, token, link):
 
 def is_bitlink(api_url, token, link):
     parsed = urlparse(link)
-    summary_link = parsed.netloc + parsed.path
+    summary_link = f'{parsed.netloc}{parsed.path}'
 
     headers = {
         'Authorization': f'Bearer {token}'
