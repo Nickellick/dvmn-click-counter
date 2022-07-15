@@ -11,13 +11,13 @@ def shorten_link(api_url, token, link_to_shorten):
         'Authorization': f'Bearer {token}'
     }
 
-    data = {
+    payload = {
         'long_url': link_to_shorten
     }
 
     url = api_url.format('shorten')
 
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
     bitlink = response.json()['link']
     return bitlink
@@ -28,8 +28,8 @@ def count_clicks(api_url, token, link):
         'Authorization': f'Bearer {token}'
     }
 
-    parsed = urlparse(link)
-    summary_link = f'{parsed.netloc}{parsed.path}'
+    parsed_link = urlparse(link)
+    summary_link = f'{parsed_link.netloc}{parsed_link.path}'
 
     url = api_url.format(f'bitlinks/{summary_link}/clicks/summary')
 
@@ -40,8 +40,8 @@ def count_clicks(api_url, token, link):
 
 
 def is_bitlink(api_url, token, link):
-    parsed = urlparse(link)
-    summary_link = f'{parsed.netloc}{parsed.path}'
+    parsed_link = urlparse(link)
+    summary_link = f'{parsed_link.netloc}{parsed_link.path}'
 
     headers = {
         'Authorization': f'Bearer {token}'
