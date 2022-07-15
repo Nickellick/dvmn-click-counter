@@ -60,21 +60,18 @@ def main():
     if is_bitlink(api_url_template, token, user_link):
         preambule_text = f'Ссылка {user_link} определена как битлинк'
         callable_function = count_clicks
-        print('Ссылка', user_link, 'определена как битлинк')
-        try:
-            clicks_count = count_clicks(api_url_template, token, user_link)
-        except requests.exceptions.HTTPError:
-            print('Произошла ошибка. Проверьте верность введёных данных')
-            sys.exit(1)
-        print('На ссылку кликнули', clicks_count, 'раз(а)')
+        epilogue_template = 'На ссылку кликнули {} раз(а)'
     else:
-        print('Ссылка', user_link, 'определена как обычная')
-        try:
-            bitlink = shorten_link(api_url_template, token, user_link)
-        except requests.exceptions.HTTPError:
-            print('Произошла ошибка. Проверьте верность введёных данных')
-            sys.exit(1)
-        print('Укороченная ссылка:', bitlink)
+        preambule_text = f'Ссылка {user_link} определена как обычная'
+        callable_function = shorten_link
+        epilogue_template = 'Укороченная ссылка: {}'
+    print(preambule_text)
+    try:
+        callback_result = callable_function(api_url_template, token, user_link)
+    except requests.exceptions.HTTPError:
+        print('Произошла ошибка. Проверьте верность введёных данных')
+        sys.exit(1)
+    print(epilogue_template.format(callback_result))
 
 
 if __name__ == '__main__':
