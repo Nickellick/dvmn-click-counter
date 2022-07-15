@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 
-
-
 def shorten_link(api_url, token, link_to_shorten):
     headers = {
         'Authorization': f'Bearer {token}'
