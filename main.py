@@ -58,6 +58,8 @@ def main():
     token = os.environ['BITLY_DVMN_TOKEN']
     user_link = input('Введите ссылку для подсчёта кликов или укорачивания: ')
     if is_bitlink(api_url_template, token, user_link):
+        preambule_text = f'Ссылка {user_link} определена как битлинк'
+        callable_function = count_clicks
         print('Ссылка', user_link, 'определена как битлинк')
         try:
             clicks_count = count_clicks(api_url_template, token, user_link)
