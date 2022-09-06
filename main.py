@@ -1,9 +1,21 @@
+import argparse
 import os
 import requests
 import sys
 
 from dotenv import load_dotenv
 from urllib.parse import urlparse
+
+
+def init_argparse():
+    parser = argparse.ArgumentParser(
+        description='bit.ly link shortener / click counter'
+    )
+    parser.add_argument(
+        'link',
+        help='Link to shrink/count'
+    )
+    return parser.parse_args()
 
 
 def shorten_link(token, link_to_shorten):
@@ -59,8 +71,9 @@ def is_bitlink(token, link):
 
 def main():
     load_dotenv()
+    args = init_argparse()
     token = os.environ['BITLY_DVMN_TOKEN']
-    user_link = input('Введите ссылку для подсчёта кликов или укорачивания: ')
+    user_link = args.link
     try:
         if is_bitlink(token, user_link):
             print(f'Ссылка {user_link} определена как битлинк')
