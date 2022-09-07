@@ -36,18 +36,17 @@ def shorten_link(token, link_to_shorten):
 
 
 def count_clicks(token, link):
-    api_url_template = 'https://api-ssl.bitly.com/v4/{}'
 
     headers = {
         'Authorization': f'Bearer {token}'
     }
 
     parsed_link = urlparse(link)
-    summary_link = f'{parsed_link.netloc}{parsed_link.path}'
 
-    url = api_url_template.format(f'bitlinks/{summary_link}/clicks/summary')
+    api_url = 'https://api-ssl.bitly.com/v4/'\
+        f'bitlinks/{parsed_link.netloc}{parsed_link.path}/clicks/summary'
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(api_url, headers=headers)
     response.raise_for_status()
     clicks_count = response.json()['total_clicks']
     return clicks_count
