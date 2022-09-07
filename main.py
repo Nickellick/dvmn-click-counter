@@ -70,15 +70,14 @@ def main():
     load_dotenv()
     args = init_argparse()
     token = os.environ['BITLY_DVMN_TOKEN']
-    user_link = args.link
     try:
-        if is_bitlink(token, user_link):
-            print(f'Ссылка {user_link} определена как битлинк')
-            clicks_amount = count_clicks(token, user_link)
+        if is_bitlink(token, args.link):
+            print(f'Ссылка {args.link} определена как битлинк')
+            clicks_amount = count_clicks(token, args.link)
             print(f'На ссылку кликнули {clicks_amount} раз(а)')
         else:
-            print(f'Ссылка {user_link} определена как обычная')
-            short_link = shorten_link(token, user_link)
+            print(f'Ссылка {args.link} определена как обычная')
+            short_link = shorten_link(token, args.link)
             print(f'Укороченная ссылка: {short_link}')
     except requests.exceptions.HTTPError:
         print('Произошла ошибка. Проверьте верность введёных данных')
