@@ -19,7 +19,7 @@ def init_argparse():
 
 
 def shorten_link(token, link_to_shorten):
-    api_url_template = 'https://api-ssl.bitly.com/v4/{}'
+    api_url = 'https://api-ssl.bitly.com/v4/shorten'
 
     headers = {
         'Authorization': f'Bearer {token}'
@@ -29,9 +29,7 @@ def shorten_link(token, link_to_shorten):
         'long_url': link_to_shorten
     }
 
-    url = api_url_template.format('shorten')
-
-    response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(api_url, headers=headers, json=payload)
     response.raise_for_status()
     bitlink = response.json()['link']
     return bitlink
